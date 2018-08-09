@@ -37,9 +37,18 @@ use const MAX_SYSTEM_IN_GALAXY;
  */
 class Fleet3 extends Controller
 {
-
+    /**
+     * 
+     * @var int
+     */
     const MODULE_ID = 8;
 
+    /**
+     * 
+     * @var string
+     */
+    const REDIRECT_TARGET = 'game.php?page=fleet1';
+    
     /**
      *
      * @var array
@@ -310,8 +319,8 @@ class Fleet3 extends Controller
             205 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
             206 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
             207 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
-            208 => [Missions::colonize, Missions::expedition],
-            209 => [Missions::recycle, Missions::expedition],
+            208 => [Missions::deploy, Missions::colonize, Missions::expedition],
+            209 => [Missions::deploy, Missions::recycle, Missions::expedition],
             210 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::spy, Missions::expedition],
             211 => [Missions::attack, Missions::acs, Missions::transport, Missions::deploy, Missions::stay, Missions::expedition],
             212 => [],
@@ -425,6 +434,11 @@ class Fleet3 extends Controller
         // sort by value from lower to higher
         sort($missions_set);
 
+        if (count($missions_set) <= 0) {
+            
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
+        }
+        
         $this->_allowed_missions = $missions_set;
 
         return $missions_set;
@@ -465,7 +479,7 @@ class Fleet3 extends Controller
 
         if (is_null($data)) {
             
-            FunctionsLib::redirect('game.php?page=fleet1');
+            FunctionsLib::redirect(self::REDIRECT_TARGET);
         }
         
         $this->_current_mission = $data['target_mission'];
